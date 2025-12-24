@@ -20,10 +20,12 @@ class NucleiExecutor:
     def __init__(self, 
                  frida_client: FridaNetworkClient,
                  verbose: bool = False,
-                 log_file: Optional[str] = None):
+                 log_file: Optional[str] = None,
+                 custom_headers: Optional[Dict[str, str]] = None):
         self.frida_client = frida_client
         self.verbose = verbose
         self.log_file = log_file
+        self.custom_headers = custom_headers or {}
         self._log_handle: Optional[TextIO] = None
         
         self.template_parser = TemplateParser()
@@ -161,7 +163,9 @@ class NucleiExecutor:
             # Process each HTTP request in template
             for http_req in template.http_requests:
                 # Build executable requests
-                requests = self.request_builder.build_requests(template, target_url)
+                requests = self.request_builder.build_requests(
+                    template, target_url, custom_headers=self.custom_headers
+                )
                 
                 for req in requests:
                     # Store request for potential saving

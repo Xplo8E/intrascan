@@ -15,9 +15,15 @@ class RequestBuilder:
     
     def build_requests(self, 
                        template: NucleiTemplate,
-                       target_url: str) -> List[dict]:
+                       target_url: str,
+                       custom_headers: Optional[Dict[str, str]] = None) -> List[dict]:
         """
         Build all requests from a template for the given target
+        
+        Args:
+            template: The Nuclei template
+            target_url: Target URL to scan
+            custom_headers: Optional custom headers to include in all requests
         
         Returns list of request dicts ready for Frida:
         [
@@ -39,7 +45,7 @@ class RequestBuilder:
         requests = []
         
         for http_req in template.http_requests:
-            reqs = self._build_http_request(http_req, variables, target_url)
+            reqs = self._build_http_request(http_req, variables, target_url, custom_headers)
             requests.extend(reqs)
             
         return requests
@@ -47,28 +53,35 @@ class RequestBuilder:
     def _build_http_request(self, 
                             http_req: HttpRequest,
                             variables: Dict[str, str],
-                            target_url: str) -> List[dict]:
+                            target_url: str,
+                            custom_headers: Optional[Dict[str, str]] = None) -> List[dict]:
         """Build request(s) from a single HTTP request definition"""
         
         # If raw requests are defined, use those
         if http_req.raw:
-            return self._build_from_raw(http_req.raw, variables)
+            return self._build_from_raw(http_req.raw, variables, custom_headers)
         
         # Otherwise, use path-based requests
         if http_req.path:
-            return self._build_from_path(http_req, variables, target_url)
+            return self._build_from_path(http_req, variables, target_url, custom_headers)
         
         return []
     
     def _build_from_raw(self, 
                         raw_requests: List[str],
-                        variables: Dict[str, str]) -> List[dict]:
+                        variables: Dict[str, str],
+                        custom_headers: Optional[Dict[str, str]] = None) -> List[dict]:
         """Build requests from raw HTTP format"""
         requests = []
         
         for raw in raw_requests:
             req = self.variable_engine.parse_raw_request(raw, variables)
             if req and req.get('url'):
+                # Merge custom headers (custom headers take precedence)
+                if custom_headers:
+                    existing_headers = req.get('headers', {})
+                    existing_headers.update(custom_headers)
+                    req['headers'] = existing_headers
                 requests.append(req)
                 
         return requests
@@ -76,7 +89,8 @@ class RequestBuilder:
     def _build_from_path(self,
                          http_req: HttpRequest,
                          variables: Dict[str, str],
-                         target_url: str) -> List[dict]:
+                         target_url: str,
+                         custom_headers: Optional[Dict[str, str]] = None) -> List[dict]:
         """Build requests from path definitions"""
         requests = []
         
@@ -97,10 +111,14 @@ class RequestBuilder:
                     # Relative path
                     url = urljoin(base + "/", path)
             
-            # Build headers
+            # Build headers from template
             headers = self.variable_engine.substitute_in_dict(
                 http_req.headers, variables
             )
+            
+            # Merge custom headers (custom headers take precedence)
+            if custom_headers:
+                headers.update(custom_headers)
             
             # Ensure Host header exists
             if "Host" not in headers and "host" not in headers:

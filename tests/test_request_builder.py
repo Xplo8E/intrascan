@@ -190,3 +190,86 @@ http:
         requests = self.builder.build_requests(template, target)
         
         assert "Host" in requests[0]["headers"]
+
+    def test_custom_headers_added(self):
+        """Test that custom headers are added to requests"""
+        content = """
+id: custom-header-test
+info:
+  name: Custom Header Test
+  severity: info
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api"
+    matchers:
+      - type: status
+        status: [200]
+"""
+        template = self.parser.parse_content(content)
+        target = "https://example.com"
+        custom_headers = {"Authorization": "Bearer token123", "X-API-Key": "secret"}
+        
+        requests = self.builder.build_requests(template, target, custom_headers=custom_headers)
+        
+        assert len(requests) == 1
+        assert requests[0]["headers"]["Authorization"] == "Bearer token123"
+        assert requests[0]["headers"]["X-API-Key"] == "secret"
+        
+    def test_custom_headers_override_template_headers(self):
+        """Test that custom headers take precedence over template headers"""
+        content = """
+id: header-override-test
+info:
+  name: Header Override Test
+  severity: info
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api"
+    headers:
+      Authorization: Bearer old_token
+      X-Custom: template_value
+    matchers:
+      - type: status
+        status: [200]
+"""
+        template = self.parser.parse_content(content)
+        target = "https://example.com"
+        custom_headers = {"Authorization": "Bearer new_token"}
+        
+        requests = self.builder.build_requests(template, target, custom_headers=custom_headers)
+        
+        assert len(requests) == 1
+        # Custom header should override template header
+        assert requests[0]["headers"]["Authorization"] == "Bearer new_token"
+        # Template header not overridden should remain
+        assert requests[0]["headers"]["X-Custom"] == "template_value"
+        
+    def test_custom_headers_with_raw_request(self):
+        """Test custom headers work with raw request format"""
+        content = """
+id: raw-custom-header-test
+info:
+  name: Raw Custom Header Test
+  severity: info
+http:
+  - raw:
+      - |
+        GET /api/test HTTP/1.1
+        Host: {{Hostname}}
+        X-Original: value
+
+    matchers:
+      - type: status
+        status: [200]
+"""
+        template = self.parser.parse_content(content)
+        target = "https://example.com"
+        custom_headers = {"Authorization": "Bearer custom"}
+        
+        requests = self.builder.build_requests(template, target, custom_headers=custom_headers)
+        
+        assert len(requests) == 1
+        assert requests[0]["headers"]["Authorization"] == "Bearer custom"
+        assert requests[0]["headers"]["X-Original"] == "value"

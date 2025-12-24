@@ -12,6 +12,12 @@ Complete reference for Intrascan CLI options and configuration.
 | `--url URL` | `-u` | Target base URL |
 | `--app BUNDLE_ID` | `-a` | iOS/Android app bundle identifier |
 
+### Request Options
+
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--header HEADER:VALUE` | `-H` | Custom header to include in all requests (can be used multiple times) |
+
 ### Filtering Options
 
 | Option | Description |

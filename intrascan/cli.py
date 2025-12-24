@@ -47,9 +47,8 @@ Documentation: https://github.com/Xplo8E/intrascan
               help='JSON output file path')
 @click.option('--store-responses', default=None,
               help='Directory to store request/response pairs for findings')
-@click.option('-s', '--severity', multiple=True, 
-              type=click.Choice(['critical', 'high', 'medium', 'low', 'info']),
-              help='Filter by severity (can be specified multiple times)')
+@click.option('-s', '--severity', default=None,
+              help='Filter by severity (comma-separated: critical,high,medium,low,info)')
 @click.option('--tags', default=None,
               help='Filter by tags (comma-separated)')
 @click.option('--exclude-tags', default=None,
@@ -70,13 +69,15 @@ Documentation: https://github.com/Xplo8E/intrascan
               help='Skip connectivity preflight check')
 @click.option('--log-file', default=None, type=str,
               help='Save detailed log to file (optional)')
+@click.option('-H', '--header', multiple=True,
+              help='Custom header in header:value format (can be used multiple times)')
 def main(template: str, 
          url: str, 
          app: str, 
          script: Optional[str],
          output: Optional[str],
          store_responses: Optional[str],
-         severity: Tuple[str, ...],
+         severity: Optional[str],
          tags: Optional[str],
          exclude_tags: Optional[str],
          rate_limit: float,
@@ -86,16 +87,37 @@ def main(template: str,
          no_color: bool,
          silent: bool,
          skip_preflight: bool,
-         log_file: Optional[str]):
+         log_file: Optional[str],
+         header: Tuple[str, ...]):
     """Intrascan - iOS/Android security scanner using Nuclei templates."""
     formatter = OutputFormatter(verbose=verbose, no_color=no_color)
     
     if not silent:
         formatter.print_banner()
         
+    # Parse severity filters
+    valid_severities = {'critical', 'high', 'medium', 'low', 'info'}
+    severity_list = None
+    if severity:
+        severity_list = [s.strip().lower() for s in severity.split(',')]
+        invalid = [s for s in severity_list if s not in valid_severities]
+        if invalid:
+            formatter.print_error(f"Invalid severity: {', '.join(invalid)}. Valid: critical,high,medium,low,info")
+            sys.exit(1)
+    
     # Parse tag filters
     include_tags = [t.strip() for t in tags.split(',')] if tags else None
     exclude_tags_list = [t.strip() for t in exclude_tags.split(',')] if exclude_tags else None
+    
+    # Parse custom headers
+    custom_headers = {}
+    for h in header:
+        if ':' in h:
+            key, value = h.split(':', 1)
+            custom_headers[key.strip()] = value.strip()
+        else:
+            formatter.print_error(f"Invalid header format: {h} (expected header:value)")
+            sys.exit(1)
     
     # Configure rate limiting
     rate_config = RateLimitConfig(
@@ -127,7 +149,7 @@ def main(template: str,
     
     try:
         # Create executor (log_file is optional)
-        executor = NucleiExecutor(client, verbose=verbose, log_file=log_file)
+        executor = NucleiExecutor(client, verbose=verbose, log_file=log_file, custom_headers=custom_headers)
         
         if not silent and log_file:
             formatter.print_info(f"Logging to: {log_file}")
@@ -152,7 +174,7 @@ def main(template: str,
         results = executor.execute(
             template_path=template,
             target_url=url,
-            severities=list(severity) if severity else None,
+            severities=severity_list,
             tags=include_tags,
             exclude_tags=exclude_tags_list,
             limit=limit if limit > 0 else None,
