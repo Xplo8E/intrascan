@@ -68,37 +68,41 @@ class OutputFormatter:
         
         return f"[{color}{severity.value}{Colors.RESET}]"
         
-    def print_banner(self):
+    def print_banner(self, version: str = "0.1.0"):
         """Print startup banner"""
         banner = f"""
-{Colors.BOLD}  _       _                                  
- (_)_ __ | |_ _ __ __ _ ___  ___ __ _ _ __  
- | | '_ \\| __| '__/ _` / __|/ __/ _` | '_ \\ 
- | | | | | |_| | | (_| \\__ \\ (_| (_| | | | |
- |_|_| |_|\\__|_|  \\__,_|___/\\___\\__,_|_| |_|
-{Colors.RESET}{Colors.DIM}Mobile app security scanner powered by Nuclei + Frida{Colors.RESET}
+{Colors.BOLD}    _       __                                 
+   (_)___  / /__________ _______________ _____ 
+  / / __ \\/ __/ ___/ __ `/ ___/ ___/ __ `/ __ \\
+ / / / / / /_/ /  / /_/ (__  ) /__/ /_/ / / / /
+/_/_/ /_/\\__/_/   \\__,_/____/\\___/\\__,_/_/ /_/ {Colors.RESET} v{version}
+{Colors.DIM}Mobile app security scanner powered by Nuclei + Frida
+                   Made by @Xplo8E{Colors.RESET}
 """
         if self.no_color:
             banner = banner.replace(Colors.BOLD, '').replace(Colors.RESET, '').replace(Colors.DIM, '')
         print(banner)
         
     def print_info(self, message: str):
-        """Print info message"""
-        print(f"[*] {message}")
+        """Print info message - blue [INF] like Nuclei"""
+        if self.no_color:
+            print(f"[INF] {message}")
+        else:
+            print(f"{Colors.MEDIUM}[INF]{Colors.RESET} {message}")
         
     def print_success(self, message: str):
-        """Print success message"""
+        """Print success message - green"""
         if self.no_color:
-            print(f"[+] {message}")
+            print(f"[INF] {message}")
         else:
-            print(f"{Colors.LOW}[+]{Colors.RESET} {message}")
+            print(f"{Colors.LOW}[INF]{Colors.RESET} {message}")
             
     def print_error(self, message: str):
-        """Print error message"""
+        """Print error/warning message - red [WRN] like Nuclei"""
         if self.no_color:
-            print(f"[!] {message}")
+            print(f"[WRN] {message}")
         else:
-            print(f"{Colors.CRITICAL}[!]{Colors.RESET} {message}")
+            print(f"{Colors.CRITICAL}[WRN]{Colors.RESET} {message}")
             
     def print_summary(self, results: List[ScanResult], duration: float):
         """Print scan summary"""

@@ -12,9 +12,6 @@ Intrascan enables security scanning of iOS/Android applications by injecting HTT
 - 🔒 **Bypass SSL Pinning** - Requests originate from within the app's network stack
 - 🌐 **VPN Passthrough** - Access internal networks the app is connected to
 - 📋 **Nuclei Compatible** - Uses standard [Nuclei](https://github.com/projectdiscovery/nuclei) YAML templates
-- 📊 **Rich Output** - Colored console output, JSON export, request/response logging
-- 🎯 **Smart Filtering** - Filter by severity, tags, or limit template count
-- ⚡ **Rate Limiting** - Configurable request rate and timeouts
 
 ## 📦 Installation
 
@@ -62,8 +59,6 @@ intrascan -t ~/nuclei-templates/http/ \
 
 1. **Internal API Testing** - Test APIs only accessible via mobile app VPN
 2. **SSL Pinned Apps** - Scan apps with certificate pinning
-3. **Mobile App Pentesting** - Automated vulnerability discovery
-4. **Bug Bounty** - Test mobile app endpoints at scale
 
 ## ⚙️ CLI Options
 
@@ -72,16 +67,20 @@ intrascan -t ~/nuclei-templates/http/ \
 | `-t, --template` | Template file or directory (required) |
 | `-u, --url` | Target base URL (required) |
 | `-a, --app` | iOS/Android app bundle ID (required) |
-| `-s, --severity` | Filter by severity (info, low, medium, high, critical) |
-| `--tags` | Include templates with these tags |
-| `--exclude-tags` | Exclude templates with these tags |
+| `-H, --header` | Custom header (header:value format, can use multiple times) |
+| `-s, --severity` | Filter by severity (comma-separated: critical,high,medium,low,info) |
+| `--tags` | Include templates with these tags (comma-separated) |
+| `--exclude-tags` | Exclude templates with these tags (comma-separated) |
 | `--limit` | Maximum templates to process |
 | `-o, --output` | Save results to JSON file |
-| `--store-responses` | Save matched request/response pairs |
+| `--store-responses` | Directory to save request/response pairs for findings |
 | `--rate-limit` | Requests per second (default: 10) |
 | `--timeout` | Request timeout in seconds (default: 30) |
-| `--skip-preflight` | Skip connectivity check |
-| `-v, --verbose` | Verbose output with detailed logging |
+| `--log-file` | Save detailed log to file |
+| `--script` | Custom Frida network script path |
+| `--skip-preflight` | Skip connectivity preflight check |
+| `-v, --verbose` | Verbose console output |
+| `--no-color` | Disable colored output |
 | `--silent` | Suppress banner and progress |
 
 ## 🧪 Running Tests

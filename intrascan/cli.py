@@ -9,6 +9,8 @@ from .executor import NucleiExecutor
 from .frida_client import FridaNetworkClient, RateLimitConfig
 from .output import OutputFormatter
 
+__version__ = "0.1.1"
+
 
 EXAMPLES = """
 EXAMPLES:
@@ -35,6 +37,7 @@ Documentation: https://github.com/Xplo8E/intrascan
 
 
 @click.command(epilog=EXAMPLES, context_settings={'max_content_width': 120})
+@click.version_option(version=__version__, prog_name='intrascan')
 @click.option('-t', '--template', required=True, 
               help='Template file or directory path')
 @click.option('-u', '--url', required=True, 
@@ -89,11 +92,11 @@ def main(template: str,
          skip_preflight: bool,
          log_file: Optional[str],
          header: Tuple[str, ...]):
-    """Intrascan - iOS/Android security scanner using Nuclei templates."""
+    """Run Nuclei templates using Frida network hooking on iOS/Android. Made by @Xplo8E"""
     formatter = OutputFormatter(verbose=verbose, no_color=no_color)
     
     if not silent:
-        formatter.print_banner()
+        formatter.print_banner(__version__)
         
     # Parse severity filters
     valid_severities = {'critical', 'high', 'medium', 'low', 'info'}

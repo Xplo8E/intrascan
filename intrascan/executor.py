@@ -128,7 +128,7 @@ class NucleiExecutor:
         # Parse templates
         templates = self.template_parser.parse_multiple(template_paths)
         
-        self._log(f"Scanning {len(templates)} templates against {target_url}")
+        self._log(f"Scanning {len(templates)} templates against {target_url}", also_print=True)
         
         # Execute each template
         results = []
