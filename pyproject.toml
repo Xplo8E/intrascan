@@ -5,15 +5,53 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "intrascan"
 version = "0.1.0"
-description = "Run Nuclei templates via Frida network injection on iOS apps"
+description = "iOS/Android security scanner using Nuclei templates via Frida"
 readme = "README.md"
+license = {text = "MIT"}
 requires-python = ">=3.10"
+authors = [
+    {name = "Xplo8E"}
+]
+keywords = [
+    "security",
+    "scanner", 
+    "nuclei",
+    "frida",
+    "mobile",
+    "ios",
+    "android",
+    "mdm",
+    "penetration-testing",
+    "vulnerability-scanner"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Software Development :: Testing",
+]
 dependencies = [
     "frida>=16.7.11",
     "frida-tools>=13.7.1",
     "PyYAML>=6.0",
     "click>=8.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Xplo8E/intrascan"
+Repository = "https://github.com/Xplo8E/intrascan"
+Documentation = "https://github.com/Xplo8E/intrascan#readme"
+Issues = "https://github.com/Xplo8E/intrascan/issues"
 
 [project.scripts]
 intrascan = "intrascan.cli:main"
@@ -22,7 +60,13 @@ intrascan = "intrascan.cli:main"
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
+    "build",
+    "twine",
 ]
 
 [tool.setuptools.packages.find]
 include = ["intrascan*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
