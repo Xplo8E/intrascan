@@ -15,13 +15,22 @@ Intrascan enables security scanning of iOS/Android applications by injecting HTT
 
 ## 📦 Installation
 
+Install from PyPI for the latest stable release. We recommend using a virtual environment with Frida:
+
 ```bash
-# Prerequisites: Frida server running on target device
+# Create and activate a venv (recommended)
+python -m venv frida-env && source frida-env/bin/activate
 
-# Activate your frida environment
-source /path/to/frida-env/bin/activate
+pip install intrascan
+```
 
-# Install in development mode
+### From Source
+
+For development or to get the latest changes, install from source:
+
+```bash
+git clone https://github.com/Xplo8E/intrascan.git
+cd intrascan
 pip install -e .
 ```
 
