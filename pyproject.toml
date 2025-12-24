@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "intrascan"
+version = "0.1.0"
+description = "Run Nuclei templates via Frida network injection on iOS apps"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "frida>=16.7.11",
+    "frida-tools>=13.7.1",
+    "PyYAML>=6.0",
+    "click>=8.0",
+]
+
+[project.scripts]
+intrascan = "nuclei_frida.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
