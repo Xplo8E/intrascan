@@ -8,8 +8,8 @@ import pytest
 import queue
 import time
 from unittest.mock import Mock, patch, MagicMock
-from nuclei_frida.frida_client import FridaNetworkClient, RateLimitConfig
-from nuclei_frida.models import FridaResponse
+from intrascan.frida_client import FridaNetworkClient, RateLimitConfig
+from intrascan.models import FridaResponse
 
 
 class TestRateLimitConfig:
@@ -90,7 +90,7 @@ class TestFridaNetworkClientInit:
 class TestFridaNetworkClientConnect:
     """Test connection logic"""
     
-    @patch('nuclei_frida.frida_client.frida')
+    @patch('intrascan.frida_client.frida')
     def test_connect_success(self, mock_frida):
         """Successful connection"""
         # Setup mocks
@@ -116,7 +116,7 @@ class TestFridaNetworkClientConnect:
         mock_script.load.assert_called_once()
         mock_device.resume.assert_called_once_with(1234)
     
-    @patch('nuclei_frida.frida_client.frida')
+    @patch('intrascan.frida_client.frida')
     def test_connect_generic_exception(self, mock_frida):
         """Handle generic connection exception"""
         mock_frida.get_usb_device.side_effect = Exception("Generic error")
@@ -362,7 +362,7 @@ class TestFridaNetworkClientDisconnect:
 class TestFridaNetworkClientContextManager:
     """Test context manager protocol"""
     
-    @patch('nuclei_frida.frida_client.frida')
+    @patch('intrascan.frida_client.frida')
     def test_context_manager(self, mock_frida):
         """Use client as context manager"""
         mock_device = MagicMock()

@@ -2,8 +2,8 @@
 
 import pytest
 
-from nuclei_frida.request_builder import RequestBuilder
-from nuclei_frida.template_parser import TemplateParser
+from intrascan.request_builder import RequestBuilder
+from intrascan.template_parser import TemplateParser
 
 
 class TestRequestBuilder:

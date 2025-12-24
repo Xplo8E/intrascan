@@ -2,7 +2,7 @@
 Shared test fixtures for intrascan tests
 """
 import pytest
-from nuclei_frida.models import (
+from intrascan.models import (
     FridaResponse, NucleiTemplate, HttpRequest, Matcher, 
     Extractor, TemplateInfo, Severity, MatcherType, ExtractorType
 )

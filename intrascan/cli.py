@@ -10,7 +10,31 @@ from .frida_client import FridaNetworkClient, RateLimitConfig
 from .output import OutputFormatter
 
 
-@click.command()
+EXAMPLES = """
+EXAMPLES:
+
+  Scan with single template:
+
+      $ intrascan -t template.yaml -u https://target.com -a com.app.bundle
+
+  Scan with severity filter:
+
+      $ intrascan -t templates/ -u https://target.com -a com.app.bundle -s high
+
+  Scan with JSON output:
+
+      $ intrascan -t templates/ -u https://target.com -a com.app.bundle -o out.json
+
+  Scan with rate limiting:
+
+      $ intrascan -t templates/ -u https://target.com -a com.app.bundle --rate-limit 5
+
+Documentation: https://github.com/Xplo8E/intrascan
+
+"""
+
+
+@click.command(epilog=EXAMPLES, context_settings={'max_content_width': 120})
 @click.option('-t', '--template', required=True, 
               help='Template file or directory path')
 @click.option('-u', '--url', required=True, 
@@ -34,8 +58,6 @@ from .output import OutputFormatter
               help='Requests per second (default: 10)')
 @click.option('--timeout', default=30, type=float,
               help='Request timeout in seconds (default: 30)')
-@click.option('--delay', default=0, type=float,
-              help='Additional delay between requests in seconds')
 @click.option('--limit', default=0, type=int,
               help='Limit number of templates to process (0 = no limit)')
 @click.option('-v', '--verbose', is_flag=True,
@@ -59,32 +81,13 @@ def main(template: str,
          exclude_tags: Optional[str],
          rate_limit: float,
          timeout: float,
-         delay: float,
          limit: int,
          verbose: bool,
          no_color: bool,
          silent: bool,
          skip_preflight: bool,
          log_file: Optional[str]):
-    """
-    Intrascan - iOS/Android security scanner using Nuclei templates.
-    
-    Examples:
-    
-    \b
-    # Single template
-    intrascan -t template.yaml -u https://target.com -a com.app.bundle
-    
-    \b
-    # Directory with filters
-    intrascan -t /path/to/templates -u https://target.com -a com.app.id \\
-        -s critical -s high -o results.json
-    
-    \b
-    # With rate limiting and response storage
-    intrascan -t cves/ -u https://target.com -a com.app.bundle \\
-        --rate-limit 5 --store-responses ./findings/
-    """
+    """Intrascan - iOS/Android security scanner using Nuclei templates."""
     formatter = OutputFormatter(verbose=verbose, no_color=no_color)
     
     if not silent:
@@ -97,7 +100,6 @@ def main(template: str,
     # Configure rate limiting
     rate_config = RateLimitConfig(
         requests_per_second=rate_limit,
-        delay_between_requests=delay,
         timeout=timeout
     )
     

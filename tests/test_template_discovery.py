@@ -5,7 +5,7 @@ import tempfile
 import os
 from pathlib import Path
 
-from nuclei_frida.template_discovery import TemplateDiscovery
+from intrascan.template_discovery import TemplateDiscovery
 
 
 class TestTemplateDiscovery:

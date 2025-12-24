@@ -7,9 +7,9 @@ a real Frida connection.
 import pytest
 import os
 from unittest.mock import Mock, MagicMock, patch
-from nuclei_frida.executor import NucleiExecutor
-from nuclei_frida.frida_client import FridaNetworkClient
-from nuclei_frida.models import (
+from intrascan.executor import NucleiExecutor
+from intrascan.frida_client import FridaNetworkClient
+from intrascan.models import (
     NucleiTemplate, HttpRequest, Matcher, Extractor,
     TemplateInfo, Severity, MatcherType, ExtractorType,
     FridaResponse, ScanResult

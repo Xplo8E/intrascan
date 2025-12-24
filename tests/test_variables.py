@@ -2,7 +2,7 @@
 
 import pytest
 
-from nuclei_frida.variables import VariableEngine
+from intrascan.variables import VariableEngine
 
 
 class TestVariableEngine:

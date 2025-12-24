@@ -6,14 +6,14 @@ template parsing through request building, matching, and extraction.
 """
 import pytest
 from unittest.mock import Mock, patch
-from nuclei_frida.models import (
+from intrascan.models import (
     FridaResponse, NucleiTemplate, HttpRequest, Matcher,
     Extractor, TemplateInfo, Severity, MatcherType, ExtractorType, ScanResult
 )
-from nuclei_frida.template_parser import TemplateParser
-from nuclei_frida.request_builder import RequestBuilder
-from nuclei_frida.matchers import MatcherEngine
-from nuclei_frida.extractors import ExtractorEngine
+from intrascan.template_parser import TemplateParser
+from intrascan.request_builder import RequestBuilder
+from intrascan.matchers import MatcherEngine
+from intrascan.extractors import ExtractorEngine
 
 
 class TestFullPipeline:

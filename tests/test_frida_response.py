@@ -5,8 +5,8 @@ These tests specifically target edge cases that could cause bugs when
 Frida JS returns data in unexpected formats.
 """
 import pytest
-from nuclei_frida.models import FridaResponse
-from nuclei_frida.matchers import MatcherEngine, Matcher, MatcherType
+from intrascan.models import FridaResponse
+from intrascan.matchers import MatcherEngine, Matcher, MatcherType
 
 
 class TestFridaResponseTypeCoercion:

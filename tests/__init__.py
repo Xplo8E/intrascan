@@ -1,1 +1,1 @@
-"""Tests for nuclei_frida package"""
+"""Tests for intrascan package"""

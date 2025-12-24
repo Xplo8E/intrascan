@@ -2,8 +2,8 @@
 
 import pytest
 
-from nuclei_frida.matchers import MatcherEngine
-from nuclei_frida.models import Matcher, MatcherType, FridaResponse
+from intrascan.matchers import MatcherEngine
+from intrascan.models import Matcher, MatcherType, FridaResponse
 
 
 class TestMatcherEngine:

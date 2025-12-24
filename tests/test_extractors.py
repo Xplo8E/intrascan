@@ -3,8 +3,8 @@
 import pytest
 import json
 
-from nuclei_frida.extractors import ExtractorEngine
-from nuclei_frida.models import Extractor, ExtractorType, FridaResponse
+from intrascan.extractors import ExtractorEngine
+from intrascan.models import Extractor, ExtractorType, FridaResponse
 
 
 class TestExtractorEngine:

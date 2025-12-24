@@ -4,8 +4,8 @@ import pytest
 import tempfile
 import os
 
-from nuclei_frida.template_parser import TemplateParser
-from nuclei_frida.models import Severity, MatcherType, ExtractorType
+from intrascan.template_parser import TemplateParser
+from intrascan.models import Severity, MatcherType, ExtractorType
 
 
 class TestTemplateParser:
