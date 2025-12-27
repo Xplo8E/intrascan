@@ -5,12 +5,12 @@
 
 **Mobile app security scanner that runs Nuclei templates via Frida network injection.**
 
-Intrascan enables security scanning of iOS/Android applications by injecting HTTP requests directly from within the app's context, bypassing SSL pinning and VPN tunnels.
+Intrascan enables security scanning of mobile applications by injecting HTTP requests directly from within the app's context, bypassing SSL pinning and VPN tunnels.
 
 ## 🌟 Key Features
 
-- 🔒 **Bypass SSL Pinning** - Requests originate from within the app's network stack
 - 🌐 **VPN Passthrough** - Access internal networks the app is connected to
+- 🔒 **Bypass SSL Pinning** - Requests originate from within the app's network stack
 - 📋 **Nuclei Compatible** - Uses standard [Nuclei](https://github.com/projectdiscovery/nuclei) YAML templates
 
 ## 📦 Installation
@@ -118,6 +118,19 @@ Intrascan is built on the shoulders of giants:
 ### Template Format
 
 Intrascan uses the same YAML template format as Nuclei. You can use templates from the [nuclei-templates](https://github.com/projectdiscovery/nuclei-templates) repository directly.
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+> [!NOTE]
+> **Android is not currently supported.** The tool currently works with iOS devices only.
+
+### Roadmap
+
+- [ ] **Android Support** - Add Frida script for network hooking on Android devices
+
+---
 
 ## 📄 License
 
